@@ -1,0 +1,559 @@
+//Krzysztof Schneider 138285
+
+package com.sample.rules
+import javax.swing.JOptionPane;
+import javax.swing.JFrame;
+
+global JFrame frame;
+ 
+declare GUIstate
+	quest : String
+	answers : String[]
+	def_ans : String
+	answer : String
+end
+
+declare enum Questions
+	FAV("What is your favorite thing to do?"), 
+	RUN("How fast do you like to run?"),
+	INDOORS("Mostly indoors?"),
+	RENT("Do you own, or rent?"),
+	IPOD("What's on your iPod?"),
+	LITERALLY("Literally?"),
+	HOWSO("How so, then?"),
+	HASTE("With haste?"),
+	POSTURE("How's your posture?"),
+	HITQUIT("Hit it or quit it?"),
+	STAYHOMEDAD("Are you a stay at home dad?"),
+	WHERE("Where?"),
+	SHALLOWS("What kind of shallows?"),
+	FRENCHFRIES("Do you eat french fries?"),
+	BUOYANCY("How's your buoyancy?"),
+	RECREATO("Recreationally?"),
+	DEEPBLUE("The deep blue sea?"),
+	ALONE("Alone?"),
+	BUMMER("Bummer, why?"),
+	WITHWHO("With who?"),
+	SCARY("Are you scary?"),
+	MOREOF("Which do you have more of?"),
+	GRAVEYARD("'cuz you work the graveyard shift?"),
+	CUDDLY("Are you cuddly?"),
+	WHATEAT("What?"),
+	KILL("Do you kill it?"),
+	WHYNOT("Why not?"),
+	HOWLONG("How long does it take?"),
+	CLIMBTREE("Would you climb a tree to get it?"),
+	QUICK("How quickly?"),
+	LAZY("Why so lazy?"),
+	HIPPIE("Are you a hippie?"),
+	BEARD("Rockin' the beard?"),
+	VOTE("How do you vote?"),
+	USCARY("You ARE scary!"),
+	OKAY("It's ok, no one expects you to");
+	fullname : String;
+end
+
+declare enum Answers
+	NO("no"), YES("yes"),
+	RUN("run"), MATE("mate"), SWIM("swim"), EAT("eat"), SLEEP("sleep"), UNDERSTAND("I don't understand this"), 
+	QUICK("I'm pretty quick"), FASTFLY("So fast I fly"), KIDWALK("Kidding... I walk"),
+	BETWEEN("I'm in between floors at the moment"), PEE("If I pee on it, i own it, right?"),
+	HAKUNA("\"HAKUNA MATATA\""), KENTUCKY("\"MY OLD KENTUCKY HOME\""),
+	DREAMS("In my dreams"), METAPHO("Metaphorically"),
+	GOOD("Bloddy good, mate"), QUASIMODO("Quasimodo"),
+	DEEPBLUE("The deep blue sea"), SAND("The sand"), SHALLOWS("In the shallows"),
+	PUDDLES("Sidewalk puddles"), PONDSLAKES("Ponds & lakes"), RIVERSSTR("Rivers & streams"),
+	PRETZELS("Yes, and pretzels"),
+	ROCK("I sink like a rock"), SINKTR("I couldn't sink if I tried"),
+	GOOF("I like to goof around"), INTENSE("I can be pretty intense"),
+	DEEPER("No, the DEEP blue sea"),
+	LIFEMATE("My life mate"), FACEBOOK("All 15,000 of my facebook friends"),
+	TEETH("Teeth"), APPENDA("Appendages"),
+	MEAN("Because I'm mean"), INVISIBLE("Because I feel... invisible"),
+	MOTHERSAY("My mother says I am"), PEOPLESAY("People other than my mother say I am"),
+	NOMEAT("No meat"), NOTPICKY("Eh, I'm not that picky"), BLOOD("Things with blood"),
+	ELSEDOES("'cuz someone else does"), RARESTEAK("I like my steak extra rare"),
+	HOURS("hours"), SECONDS("a few seconds"), LATER("I tie it up out back and kill it later"),
+	FASTERUTHINK("Faster than you'd think"), SLOWERUTHINK("Slower than you'd think"),
+	BEAUTYSLEEP("I need 9 months of beauty sleep"),  TRASH("Trash cans are easier"),
+	FULLBODY("Full-body"), TATS("I'm more into tats"),
+	GUNS("for guns"), UNDERGROUND("for the underground movement");
+	fullname : String;
+end
+
+rule "Init"
+	when
+	then
+		insert(new GUIstate(Questions.FAV.getFullname(), new String[]{Answers.RUN.getFullname(), Answers.MATE.getFullname(), Answers.SWIM.getFullname(), Answers.EAT.getFullname(), Answers.SLEEP.getFullname(), Answers.UNDERSTAND.getFullname()}, Answers.RUN.getFullname(), ""));
+		insert(new GUIstate(Questions.RUN.getFullname(), new String[]{Answers.QUICK.getFullname(), Answers.FASTFLY.getFullname(), Answers.KIDWALK.getFullname()}, Answers.QUICK.getFullname(), ""));
+		insert(new GUIstate(Questions.INDOORS.getFullname(), new String[]{Answers.YES.getFullname(), Answers.NO.getFullname()}, Answers.YES.getFullname(), ""));
+		insert(new GUIstate(Questions.RENT.getFullname(), new String[]{Answers.BETWEEN.getFullname(), Answers.PEE.getFullname()}, Answers.BETWEEN.getFullname(), ""));
+		insert(new GUIstate(Questions.IPOD.getFullname(), new String[]{Answers.HAKUNA.getFullname(), Answers.KENTUCKY.getFullname()}, Answers.HAKUNA.getFullname(), ""));
+		insert(new GUIstate(Questions.LITERALLY.getFullname(), new String[]{Answers.YES.getFullname(), Answers.NO.getFullname()}, Answers.YES.getFullname(), ""));
+		insert(new GUIstate(Questions.HOWSO.getFullname(), new String[]{Answers.DREAMS.getFullname(), Answers.METAPHO.getFullname()}, Answers.DREAMS.getFullname(), ""));
+		insert(new GUIstate(Questions.HASTE.getFullname(), new String[]{Answers.YES.getFullname(), Answers.NO.getFullname()}, Answers.YES.getFullname(), ""));
+		insert(new GUIstate(Questions.POSTURE.getFullname(), new String[]{Answers.GOOD.getFullname(), Answers.QUASIMODO.getFullname()}, Answers.GOOD.getFullname(), ""));
+		insert(new GUIstate(Questions.HITQUIT.getFullname(), new String[]{Answers.YES.getFullname(), Answers.NO.getFullname()}, Answers.YES.getFullname(), ""));
+		insert(new GUIstate(Questions.STAYHOMEDAD.getFullname(), new String[]{Answers.YES.getFullname(), Answers.NO.getFullname()}, Answers.YES.getFullname(), ""));
+		insert(new GUIstate(Questions.WHERE.getFullname(), new String[]{Answers.DEEPBLUE.getFullname(), Answers.SAND.getFullname(), Answers.SHALLOWS.getFullname()}, Answers.DEEPBLUE.getFullname(), ""));
+		insert(new GUIstate(Questions.SHALLOWS.getFullname(), new String[]{Answers.PUDDLES.getFullname(), Answers.PONDSLAKES.getFullname(), Answers.RIVERSSTR.getFullname()}, Answers.PUDDLES.getFullname(), ""));
+		insert(new GUIstate(Questions.FRENCHFRIES.getFullname(), new String[]{Answers.PRETZELS.getFullname(), Answers.NO.getFullname()}, Answers.PRETZELS.getFullname(), ""));
+		insert(new GUIstate(Questions.BUOYANCY.getFullname(), new String[]{Answers.ROCK.getFullname(), Answers.SINKTR.getFullname()}, Answers.ROCK.getFullname(), ""));
+		insert(new GUIstate(Questions.RECREATO.getFullname(), new String[]{Answers.GOOF.getFullname(), Answers.INTENSE.getFullname()}, Answers.GOOF.getFullname(), ""));
+		insert(new GUIstate(Questions.DEEPBLUE.getFullname(), new String[]{Answers.YES.getFullname(), Answers.DEEPER.getFullname()}, Answers.YES.getFullname(), ""));
+		insert(new GUIstate(Questions.ALONE.getFullname(), new String[]{Answers.YES.getFullname(), Answers.NO.getFullname()}, Answers.YES.getFullname(), ""));
+		insert(new GUIstate(Questions.BUMMER.getFullname(), new String[]{Answers.MEAN.getFullname(), Answers.INVISIBLE.getFullname()}, Answers.MEAN.getFullname(), ""));
+		insert(new GUIstate(Questions.WITHWHO.getFullname(), new String[]{Answers.LIFEMATE.getFullname(), Answers.FACEBOOK.getFullname()}, Answers.LIFEMATE.getFullname(), ""));
+		insert(new GUIstate(Questions.SCARY.getFullname(), new String[]{Answers.YES.getFullname(), Answers.NO.getFullname()}, Answers.YES.getFullname(), ""));
+		insert(new GUIstate(Questions.USCARY.getFullname(), new String[]{Answers.YES.getFullname()}, Answers.YES.getFullname(), ""));
+		insert(new GUIstate(Questions.MOREOF.getFullname(), new String[]{Answers.TEETH.getFullname(), Answers.APPENDA.getFullname()}, Answers.TEETH.getFullname(), ""));
+		insert(new GUIstate(Questions.GRAVEYARD.getFullname(), new String[]{Answers.YES.getFullname(), Answers.NO.getFullname()}, Answers.YES.getFullname(), ""));
+		insert(new GUIstate(Questions.CUDDLY.getFullname(), new String[]{Answers.MOTHERSAY.getFullname(), Answers.PEOPLESAY.getFullname()}, Answers.MOTHERSAY.getFullname(), ""));
+		insert(new GUIstate(Questions.OKAY.getFullname(), new String[]{Answers.YES.getFullname()}, Answers.YES.getFullname(), ""));
+		insert(new GUIstate(Questions.WHATEAT.getFullname(), new String[]{Answers.NOMEAT.getFullname(), Answers.NOTPICKY.getFullname(), Answers.BLOOD.getFullname()}, Answers.NOMEAT.getFullname(), ""));
+		insert(new GUIstate(Questions.KILL.getFullname(), new String[]{Answers.YES.getFullname(), Answers.NO.getFullname()}, Answers.YES.getFullname(), ""));
+		insert(new GUIstate(Questions.WHYNOT.getFullname(), new String[]{Answers.ELSEDOES.getFullname(), Answers.RARESTEAK.getFullname()}, Answers.ELSEDOES.getFullname(), ""));
+		insert(new GUIstate(Questions.HOWLONG.getFullname(), new String[]{Answers.HOURS.getFullname(), Answers.SECONDS.getFullname(), Answers.LATER.getFullname()}, Answers.HOURS.getFullname(), ""));
+		insert(new GUIstate(Questions.CLIMBTREE.getFullname(), new String[]{Answers.YES.getFullname(), Answers.NO.getFullname()}, Answers.YES.getFullname(), ""));
+		insert(new GUIstate(Questions.QUICK.getFullname(), new String[]{Answers.FASTERUTHINK.getFullname(), Answers.SLOWERUTHINK.getFullname()}, Answers.FASTERUTHINK.getFullname(), ""));
+		insert(new GUIstate(Questions.LAZY.getFullname(), new String[]{Answers.BEAUTYSLEEP.getFullname(), Answers.TRASH.getFullname()}, Answers.BEAUTYSLEEP.getFullname(), ""));
+		insert(new GUIstate(Questions.HIPPIE.getFullname(), new String[]{Answers.YES.getFullname(), Answers.NO.getFullname()}, Answers.YES.getFullname(), ""));
+		insert(new GUIstate(Questions.BEARD.getFullname(), new String[]{Answers.FULLBODY.getFullname(), Answers.TATS.getFullname()}, Answers.FULLBODY.getFullname(), ""));
+		insert(new GUIstate(Questions.VOTE.getFullname(), new String[]{Answers.GUNS.getFullname(), Answers.UNDERGROUND.getFullname()}, Answers.GUNS.getFullname(), ""));
+end
+
+rule "PytanieFAV"
+	when
+		r : GUIstate(q : quest == Questions.FAV.getFullname(), ans : answers, def : def_ans, fans : answer == "");
+	then
+	    r.setAnswer(dialog(frame, q, ans, def));
+	    update(r);
+end
+
+rule "Pytania_posrednie"
+	when
+		(r : GUIstate(q : quest == Questions.RUN.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.FAV.getFullname(), answer == Answers.RUN.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.INDOORS.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.RUN.getFullname(), answer == Answers.QUICK.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.RENT.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.INDOORS.getFullname(), answer == Answers.YES.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.IPOD.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.INDOORS.getFullname(), answer == Answers.NO.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.LITERALLY.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.RUN.getFullname(), answer == Answers.FASTFLY.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.HOWSO.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.LITERALLY.getFullname(), answer == Answers.NO.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.HASTE.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.RUN.getFullname(), answer == Answers.KIDWALK.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.POSTURE.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.HASTE.getFullname(), answer == Answers.YES.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.HITQUIT.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.FAV.getFullname(), answer == Answers.MATE.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.STAYHOMEDAD.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.HITQUIT.getFullname(), answer == Answers.NO.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.WHERE.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.FAV.getFullname(), answer == Answers.SWIM.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.SHALLOWS.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.WHERE.getFullname(), answer == Answers.SHALLOWS.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.FRENCHFRIES.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.SHALLOWS.getFullname(), answer == Answers.PUDDLES.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.BUOYANCY.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.SHALLOWS.getFullname(), answer == Answers.PONDSLAKES.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.RECREATO.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.SHALLOWS.getFullname(), answer == Answers.RIVERSSTR.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.DEEPBLUE.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.WHERE.getFullname(), answer == Answers.DEEPBLUE.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.ALONE.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.DEEPBLUE.getFullname(), answer == Answers.YES.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.WITHWHO.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.ALONE.getFullname(), answer == Answers.NO.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.BUMMER.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.ALONE.getFullname(), answer == Answers.YES.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.SCARY.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.DEEPBLUE.getFullname(), answer == Answers.DEEPER.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.MOREOF.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.SCARY.getFullname(), answer == Answers.YES.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.USCARY.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.SCARY.getFullname(), answer == Answers.NO.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.MOREOF.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.USCARY.getFullname(), answer == Answers.YES.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.GRAVEYARD.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.FAV.getFullname(), answer == Answers.SLEEP.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.CUDDLY.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.GRAVEYARD.getFullname(), answer == Answers.NO.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.WHATEAT.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.FAV.getFullname(), answer == Answers.EAT.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.HIPPIE.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.WHATEAT.getFullname(), answer == Answers.NOMEAT.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.BEARD.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.HIPPIE.getFullname(), answer == Answers.YES.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.VOTE.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.HIPPIE.getFullname(), answer == Answers.NO.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.CLIMBTREE.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.WHATEAT.getFullname(), answer == Answers.NOTPICKY.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.LAZY.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.CLIMBTREE.getFullname(), answer == Answers.NO.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.QUICK.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.CLIMBTREE.getFullname(), answer == Answers.YES.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.KILL.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.WHATEAT.getFullname(), answer == Answers.BLOOD.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.WHYNOT.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.KILL.getFullname(), answer == Answers.NO.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.HOWLONG.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.KILL.getFullname(), answer == Answers.YES.getFullname()))
+		or
+		(r : GUIstate(q : quest == Questions.OKAY.getFullname(), ans : answers, def : def_ans, fans : answer == "")
+		and GUIstate(quest == Questions.FAV.getFullname(), answer == Answers.UNDERSTAND.getFullname()));
+	then
+	    r.setAnswer(dialog(frame, q, ans, def));
+	    update(r);
+end
+
+rule "PytanieRENTodp1"
+	when
+		GUIstate(quest == Questions.RENT.getFullname(), answer == Answers.BETWEEN.getFullname)
+	then
+	    dialog(frame, "You're cockroach!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieRENTodp2"
+	when
+		GUIstate(quest == Questions.RENT.getFullname(), answer == Answers.PEE.getFullname)
+	then
+	    dialog(frame, "You're miniature schnauzer!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieIPODodp1"
+	when
+		GUIstate(quest == Questions.IPOD.getFullname(), answer == Answers.HAKUNA.getFullname)
+	then
+	    dialog(frame, "You're african lion!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieIPODodp2"
+	when
+		GUIstate(quest == Questions.IPOD.getFullname(), answer == Answers.KENTUCKY.getFullname)
+	then
+	    dialog(frame, "You're quarterhorse!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieHOWSOodp1"
+	when
+		GUIstate(quest == Questions.HOWSO.getFullname(), answer == Answers.DREAMS.getFullname)
+	then
+	    dialog(frame, "You're tanzania ostrich!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieHOWSOodp2"
+	when
+		GUIstate(quest == Questions.HOWSO.getFullname(), answer == Answers.METAPHO.getFullname)
+	then
+	    dialog(frame, "You're cheetah!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieLITERALLYodp"
+	when
+		GUIstate(quest == Questions.LITERALLY.getFullname(), answer == Answers.YES.getFullname)
+	then
+	    dialog(frame, "You're peregrine falcon!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytaniePOSTUREodp1"
+	when
+		GUIstate(quest == Questions.POSTURE.getFullname(), answer == Answers.QUASIMODO.getFullname)
+	then
+	    dialog(frame, "You're silverback gorilla!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytaniePOSTUREodp2"
+	when
+		GUIstate(quest == Questions.POSTURE.getFullname(), answer == Answers.GOOD.getFullname)
+	then
+	    dialog(frame, "You're antilopine kangaroo!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieHASTEodp"
+	when
+		GUIstate(quest == Questions.HASTE.getFullname(), answer == Answers.NO.getFullname)
+	then
+	    dialog(frame, "You're galapagos tortoise!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieSTAYHOMEDADodp1"
+	when
+		GUIstate(quest == Questions.STAYHOMEDAD.getFullname(), answer == Answers.YES.getFullname)
+	then
+	    dialog(frame, "You're pygmy seahorse!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieSTAYHOMEDADodp2"
+	when
+		GUIstate(quest == Questions.STAYHOMEDAD.getFullname(), answer == Answers.NO.getFullname)
+	then
+	    dialog(frame, "You're turtle dove!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieHITQUITodp"
+	when
+		GUIstate(quest == Questions.HITQUIT.getFullname(), answer == Answers.YES.getFullname)
+	then
+	    dialog(frame, "You're bottlenose dolphin!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieFRENCHFRIESodp1"
+	when
+		GUIstate(quest == Questions.FRENCHFRIES.getFullname(), answer == Answers.NO.getFullname)
+	then
+	    dialog(frame, "You're probably algae!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieFRENCHFRIESodp2"
+	when
+		GUIstate(quest == Questions.FRENCHFRIES.getFullname(), answer == Answers.PRETZELS.getFullname)
+	then
+	    dialog(frame, "You're feral pigeon!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieBUOYANCYodp1"
+	when
+		GUIstate(quest == Questions.BUOYANCY.getFullname(), answer == Answers.ROCK.getFullname)
+	then
+	    dialog(frame, "You're thick shelled river mussel!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieBUOYANCYodp2"
+	when
+		GUIstate(quest == Questions.BUOYANCY.getFullname(), answer == Answers.SINKTR.getFullname)
+	then
+	    dialog(frame, "You're lesser snow goose!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieRECREATOodp1"
+	when
+		GUIstate(quest == Questions.RECREATO.getFullname(), answer == Answers.GOOF.getFullname)
+	then
+	    dialog(frame, "You're eurasion river otter!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieRECREATOodp2"
+	when
+		GUIstate(quest == Questions.RECREATO.getFullname(), answer == Answers.INTENSE.getFullname)
+	then
+	    dialog(frame, "You're red pirhana!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieWHEREodp"
+	when
+		GUIstate(quest == Questions.WHERE.getFullname(), answer == Answers.SAND.getFullname)
+	then
+	    dialog(frame, "You're desert monitor!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieWITHWHOodp1"
+	when
+		GUIstate(quest == Questions.WITHWHO.getFullname(), answer == Answers.LIFEMATE.getFullname)
+	then
+	    dialog(frame, "You're french angelfish!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieWITHWHOodp2"
+	when
+		GUIstate(quest == Questions.WITHWHO.getFullname(), answer == Answers.FACEBOOK.getFullname)
+	then
+	    dialog(frame, "You're yellowtail barracuda!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieBUMMERodp1"
+	when
+		GUIstate(quest == Questions.BUMMER.getFullname(), answer == Answers.MEAN.getFullname)
+	then
+	    dialog(frame, "You're bull shark!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieBUMMERodp2"
+	when
+		GUIstate(quest == Questions.BUMMER.getFullname(), answer == Answers.INVISIBLE.getFullname)
+	then
+	    dialog(frame, "You're transparent jellyfish!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieMOREOFodp1"
+	when
+		GUIstate(quest == Questions.MOREOF.getFullname(), answer == Answers.TEETH.getFullname)
+	then
+	    dialog(frame, "You're viperfish!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieMOREOFodp2"
+	when
+		GUIstate(quest == Questions.MOREOF.getFullname(), answer == Answers.APPENDA.getFullname)
+	then
+	    dialog(frame, "You're giant squid!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieCUDDLYodp1"
+	when
+		GUIstate(quest == Questions.CUDDLY.getFullname(), answer == Answers.MOTHERSAY.getFullname)
+	then
+	    dialog(frame, "You're giant armadillo!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieCUDDLYodp2"
+	when
+		GUIstate(quest == Questions.CUDDLY.getFullname(), answer == Answers.PEOPLESAY.getFullname)
+	then
+	    dialog(frame, "You're koala bear!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieGRAVEYARDodp"
+	when
+		GUIstate(quest == Questions.GRAVEYARD.getFullname(), answer == Answers.YES.getFullname)
+	then
+	    dialog(frame, "You're brown bat!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieBEARDodp1"
+	when
+		GUIstate(quest == Questions.BEARD.getFullname(), answer == Answers.FULLBODY.getFullname)
+	then
+	    dialog(frame, "You're woolly yak!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieBEARDodp2"
+	when
+		GUIstate(quest == Questions.BEARD.getFullname(), answer == Answers.TATS.getFullname)
+	then
+	    dialog(frame, "You're grant's zebra!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieVOTEodp1"
+	when
+		GUIstate(quest == Questions.VOTE.getFullname(), answer == Answers.UNDERGROUND.getFullname)
+	then
+	    dialog(frame, "You're garden worm!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieVOTEodp2"
+	when
+		GUIstate(quest == Questions.VOTE.getFullname(), answer == Answers.GUNS.getFullname)
+	then
+	    dialog(frame, "You're african elephant!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieLAZYodp1"
+	when
+		GUIstate(quest == Questions.LAZY.getFullname(), answer == Answers.BEAUTYSLEEP.getFullname)
+	then
+	    dialog(frame, "You're alpine marmot!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieLAZYodp2"
+	when
+		GUIstate(quest == Questions.LAZY.getFullname(), answer == Answers.TRASH.getFullname)
+	then
+	    dialog(frame, "You're northern raccoon!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieQUICKodp1"
+	when
+		GUIstate(quest == Questions.QUICK.getFullname(), answer == Answers.FASTERUTHINK.getFullname)
+	then
+	    dialog(frame, "You're himalayan black bear!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieQUICKodp2"
+	when
+		GUIstate(quest == Questions.QUICK.getFullname(), answer == Answers.SLOWERUTHINK.getFullname)
+	then
+	    dialog(frame, "You're two-toed sloth!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieWHYNOTodp1"
+	when
+		GUIstate(quest == Questions.WHYNOT.getFullname(), answer == Answers.ELSEDOES.getFullname)
+	then
+	    dialog(frame, "You're ruppel's griffin vulture!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieWHYNOTodp2"
+	when
+		GUIstate(quest == Questions.WHYNOT.getFullname(), answer == Answers.RARESTEAK.getFullname)
+	then
+	    dialog(frame, "You're horse leech!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieHOWLONGodp1"
+	when
+		GUIstate(quest == Questions.HOWLONG.getFullname(), answer == Answers.HOURS.getFullname)
+	then
+	    dialog(frame, "You're burmese python!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieHOWLONGodp2"
+	when
+		GUIstate(quest == Questions.HOWLONG.getFullname(), answer == Answers.SECONDS.getFullname)
+	then
+	    dialog(frame, "You're saltwater crocodile!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieHOWLONGodp3"
+	when
+		GUIstate(quest == Questions.HOWLONG.getFullname(), answer == Answers.LATER.getFullname)
+	then
+	    dialog(frame, "You're black widow spider!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+rule "PytanieOKAYodp"
+	when
+		GUIstate(quest == Questions.OKAY.getFullname(), answer == Answers.YES.getFullname)
+	then
+	    dialog(frame, "You're belgium milk sheep!", new String[] {Answers.YES.getFullname()}, Answers.YES.getFullname());
+end
+
+
+function String dialog(JFrame fr, String question, String[] answers, String default_answer) {
+		int i = JOptionPane.showOptionDialog(fr,
+	    question,
+	    "",
+	    JOptionPane.YES_NO_CANCEL_OPTION,
+	    JOptionPane.QUESTION_MESSAGE,
+	    null,
+	    answers,
+	    default_answer);
+	    return answers[i];
+}
